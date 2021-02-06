@@ -1,4 +1,4 @@
-const sharp = require("sharp");
+const sharp = require('sharp')
 
 /* sharp("./img/001.jpg")
   .rotate()
@@ -10,10 +10,10 @@ const sharp = require("sharp");
   })
   .catch((err) => {}); */
 
-doit();
+doit()
 
 async function doit() {
-  const imgBuffer = await sharp("./src/img/001.jpg")
+  const imgBuffer = await sharp('./public/images/001.jpg')
     .extract({
       left: 500,
       top: 200,
@@ -21,6 +21,6 @@ async function doit() {
       height: 400,
     })
     // .resize(400, 400, {})
-    .toBuffer();
-  const img = await sharp(imgBuffer).toFile("sharp.jpg");
+    .toBuffer()
+  const img = await sharp(imgBuffer).toFile('sharp.jpg')
 }

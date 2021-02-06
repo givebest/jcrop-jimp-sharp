@@ -1,0 +1,84 @@
+<div class="container">
+    <button id="submit">确定</button>
+    <div class="img--container">
+        <img id="target" src="images/001.jpg">
+    </div>
+    <canvas id="canvas" class="canvas" width="600" height="600"></canvas>
+
+    <img src="" alt="" id="picture">
+</div>
+
+<script src="https://unpkg.com/jcrop"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script>
+    // element
+    const submit = document.getElementById('submit')
+    const picture = document.getElementById('picture')
+    const target = document.getElementById('target')
+
+    // canvas
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    /*  ctx.fillStyle = "green";
+
+     ctx.fillRect(10, 10, 150, 100);
+
+     let image = new Image();
+
+     image.onload = function () {
+         ctx.drawImage(image, 33, 71, 104, 124, 21, 20, 87, 104);
+     };
+
+     image.src = "img/001.jpg"; */
+
+
+    // jcrop
+    const jcrop = Jcrop.attach('target');
+
+    const rect = Jcrop.Rect.create(0, 0, 100, 100);
+    const options = {};
+    const widget = jcrop.newWidget(rect, options);
+
+    console.log(jcrop.active.pos);
+
+    jcrop.listen('crop.change', function (widget, e) {
+        const pos = widget.pos;
+        console.log(pos.x, pos.y, pos.w, pos.h);
+    });
+
+    // 确认裁剪
+    submit.addEventListener('click', function () {
+        console.log('jcrop.active.pos', jcrop.active.pos)
+
+        const pos = jcrop.active.pos
+        const { x, y, w, h } = pos
+
+
+
+        let image = new Image();
+        image.onload = function () {
+            ctx.drawImage(image, x, y, w, h, x, y, w, h);
+        };
+        image.src = "img/001.jpg";
+        // ctx.drawImage(target, x,y,w,h,x,y,w,h);
+
+        canvas.width = w
+        canvas.height = h
+
+        const img = canvas.toDataURL("image/png");
+        picture.src = img
+
+        // 传输给后端参数
+        const params = Object.assign(pos, { imgUrl: './public/images/001.jpg' })
+        axios.post('/image', params)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }, false)
+
+
+</script>
