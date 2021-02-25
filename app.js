@@ -3,11 +3,24 @@ var express = require('express')
 var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
+var session = require('express-session')
 
 var indexRouter = require('./routes/index')
 var imageRouter = require('./routes/image')
+var captchaRouter = require('./routes/captcha')
+var formRouter = require('./routes/form')
+var postRouter = require('./routes/post')
 
 var app = express()
+
+app.use(
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    // cookie: { secure: true },
+  })
+)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -21,6 +34,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/image', imageRouter)
+app.use('/captcha', captchaRouter)
+app.use('/form', formRouter)
+app.use('/post', postRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
