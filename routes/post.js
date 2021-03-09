@@ -7,7 +7,11 @@ router.post('/', function (req, res, next) {
 
   console.log('req.body.captcha', req.body.captcha)
 
-  res.send('respond with a resource' + (sessionCaptcha === captcha))
+  res.send(
+    `respond with a resource  ${sessionCaptcha}---${captcha}：（${
+      sessionCaptcha === captcha
+    }）`
+  )
 })
 
 module.exports = router
